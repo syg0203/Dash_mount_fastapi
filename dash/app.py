@@ -5,18 +5,13 @@ from dashapp import create_dash_app
 
 app = FastAPI()
 
-@app.get("/")
-def read_main():
-    return {"routes": [{"method": "GET", "path": "/", "summary": "Landing"},
-                       {"method": "GET", "path": "/status", "summary": "App status"},
-                       {"method": "GET", "path": "/dash", "summary": "Sub-mounted Dash application"}]}
-
 @app.get("/status")
 def get_status():
-    return {"status": "ok"}
+    return {"routes": [{"method": "GET", "path": "/", "summary": "Sub-mounted Dash application"},
+                       {"method": "GET", "path": "/status", "summary": "App status"}]}
 
-dash_app = create_dash_app(requests_pathname_prefix="/dash/")
-app.mount("/dash", WSGIMiddleware(dash_app.server))
+dash_app = create_dash_app(requests_pathname_prefix="/")
+app.mount("/", WSGIMiddleware(dash_app.server))
 
 if __name__ == "__main__":
-    uvicorn.run(app, port=2030)
+    uvicorn.run(app, host="0.0.0.0", port=2030)
