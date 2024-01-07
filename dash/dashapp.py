@@ -221,5 +221,6 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
         return fig_corr
     return app
 
-# if __name__ == "__main__":
-#     create_dash_app.app.run_server() # 디버그 모드 추가
+if __name__ == "__main__":
+    app=create_dash_app()
+    app.run_server() # 디버그 모드 추가
