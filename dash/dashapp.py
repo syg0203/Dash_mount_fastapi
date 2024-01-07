@@ -23,13 +23,16 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
                     values='id',
                     names='target',
                     hole=0.3,
-                    color_discrete_sequence=['#bad6eb', '#2b7bba'])
+                    color_discrete_sequence=['#bad6eb', '#2b7bba'],
+                    )
 
     fig_pie.update_layout(
         width=320,
         height=250,
         margin=dict(l=30, r=10, t=10, b=10),
         paper_bgcolor='rgba(0,0,0,0)',
+        showlegend=False
+        
     )
 
     # sidebar section 생성 (setting(1):(graph)10:(variables)9
@@ -37,17 +40,20 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
         [
             dbc.Row(
                 dbc.Col(html.H5('Settings', className='text-white font-italic', style={'margin-top': '12px'}), 
+                        
                         width=12, 
                         className='bg-primary'),
-                style={"height": "5vh"}
+                style={"height": "auto"}
             ),
             dbc.Row(
                 dbc.Col(
                     html.Div(
-                    html.Img(src='https://avatars.githubusercontent.com/u/79491796?v=4', style={'height': 'auto', 'width': '90%'}),
+                    html.Img(src='https://avatars.githubusercontent.com/u/79491796?v=4',
+                             style={'max-width': '90%', 'max-height': '45vh', 'height': 'auto', 'width': 'auto'}),
                     style={'text-align': 'center'}),
                     width=12
-                )
+                ),
+                style={"height": "auto"}
             ),
             dbc.Row(
                 [
