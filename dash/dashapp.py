@@ -40,7 +40,6 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
         [
             dbc.Row(
                 dbc.Col(html.H5('Settings', className='text-white font-italic', style={'margin-top': '12px'}), 
-                        
                         width=12, 
                         className='bg-primary'),
                 style={"height": "auto"}
@@ -67,8 +66,6 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
                         html.P('heatmap 변수', className='font-weight-bold', style={'margin-top': '16px'}),
                         dcc.Dropdown(id='my-corr-picker', multi=True, value=vars_cont + ['target'],
                                     options=[{'label': x, 'value': x} for x in vars_cont + ['target']]),
-                        html.Button(id='my-button', n_clicks=0, children='적용하기',
-                                    className='btn btn-dark mt-3'),
                         html.Hr()
                     ], width=12)
                 ],
@@ -136,9 +133,8 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
 
     @app.callback(Output('bar-chart', 'figure'),
                 Output('bar-title', 'children'),
-                Input('my-button', 'n_clicks'),
-                State('my-cat-picker', 'value'))
-    def update_bar(n_clicks, cat_pick):
+                Input('my-cat-picker', 'value'))
+    def update_bar(cat_pick):
         bar_df = df.groupby(['target', cat_pick]).count()['id'].reset_index()
         bar_df['target'] = bar_df['target'].replace({0: 'target=0', 1: 'target=1'})
 
@@ -171,9 +167,8 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
 
     @app.callback(Output('dist-chart', 'figure'),
                 Output('dist-title', 'children'),
-                Input('my-button', 'n_clicks'),
-                State('my-cont-picker', 'value'))
-    def update_dist(n_clicks, cont_pick):
+                Input('my-cont-picker', 'value'))
+    def update_dist(cont_pick):
         num0 = df[df['target'] == 0][cont_pick].values.tolist()
         num1 = df[df['target'] == 1][cont_pick].values.tolist()
 
@@ -201,9 +196,8 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
 
 
     @app.callback(Output('corr-chart', 'figure'),
-                Input('my-button', 'n_clicks'),
-                State('my-corr-picker', 'value'))
-    def update_corr(n_clicks, corr_pick):
+                Input('my-corr-picker', 'value'))
+    def update_corr(corr_pick):
         df_corr = df[corr_pick].corr()
         x = list(df_corr.columns)
         y = list(df_corr.index)
