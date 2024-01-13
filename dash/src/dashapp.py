@@ -9,12 +9,12 @@ import numpy as np
 import plotly.express as px
 import plotly.figure_factory as ff
 
-def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
+def create_dash_app(requests_pathname_prefix:str) -> dash.Dash:
     df = pd.read_csv('data/data_sample.csv')
     vars_cat = [var for var in df.columns if var.startswith('cat')]
     vars_cont = [var for var in df.columns if var.startswith('cont')]
 
-    app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+    app = dash.Dash(external_stylesheets=[dbc.themes.BOOTSTRAP],requests_pathname_prefix=requests_pathname_prefix)
 
     # pie chart
     pie = df.groupby('target').count()['id'] / len(df)
@@ -164,35 +164,40 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
 
         return fig_bar, title_bar
 
-
-    @app.callback(Output('dist-chart', 'figure'),
-                Output('dist-title', 'children'),
-                Input('my-cont-picker', 'value'))
+    @app.callback(
+        Output('dist-chart', 'figure'),
+        Output('dist-title', 'children'),
+        Input('my-cont-picker', 'value')
+    )
     def update_dist(cont_pick):
         num0 = df[df['target'] == 0][cont_pick].values.tolist()
         num1 = df[df['target'] == 1][cont_pick].values.tolist()
 
-        fig_dist = ff.create_distplot(hist_data=[num0, num1],
-                                    group_labels=['target=0', 'target=1'],
-                                    show_hist=False,
-                                    colors=['#bad6eb', '#2b7bba'])
+        fig_dist = ff.create_distplot(
+            [num0, num1],
+            ['target=0', 'target=1'],
+            show_hist=False,
+            colors=['#bad6eb', '#2b7bba']
+        )
 
-        fig_dist.update_layout(width=500,
-                            height=340,
-                            margin=dict(t=20, b=20, l=40, r=20),
-                            paper_bgcolor='rgba(0,0,0,0)',
-                            plot_bgcolor='rgba(0,0,0,0)',
-                            legend=dict(
-                                orientation="h",
-                                yanchor="bottom",
-                                y=1.02,
-                                xanchor="right",
-                                x=1
-                            ))
+        fig_dist.update_layout(
+            autosize=True,
+            margin=dict(t=20, b=20, l=40, r=20),
+            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='rgba(0,0,0,0)',
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=1.02,
+                xanchor="right",
+                x=1
+            )
+        )
 
         title_dist = '선택 변수 : ' + cont_pick
 
         return fig_dist, title_dist
+
 
 
     @app.callback(Output('corr-chart', 'figure'),
@@ -222,5 +227,5 @@ def create_dash_app(requests_pathname_prefix: str = '/') -> dash.Dash:
     return app
 
 if __name__ == "__main__":
-    app=create_dash_app()
+    app=create_dash_app('/')
     app.run_server() # 디버그 모드 추가
