@@ -14,20 +14,33 @@ dashboard_li = ["example1"]
 
 app = FastAPI()
 
-@app.get("/status")
-def get_status():
-    return {"routes": [{"method": "GET", "path": "/", "summary": "Sub-mounted Dash application"},
-                       {"method": "GET", "path": "/status", "summary": "App status"}]}
 
 @app.get("/health_check")
-def get_status():
+def get_status() -> dict:
+    '''
+        Health check를 하는 함수 endpoint : health_check
+
+        Args:
+            None
+
+        Returns:
+            dict
+    '''
     return {"code": 200, "status":"running"}
 
 @app.get("/")
-def get_summary():
+def get_summary() -> dict:
+    '''
+        접속 메인 함수 endpoint : /
+
+        Args:
+            None
+
+        Returns:
+            dict
+    '''
     links = [f"http://127.0.0.1:2030/{dashboard}" for dashboard in dashboard_li]
-    return {"code": 200,
-            "content":"학습파트 DashBoard 입니다",
+    return {"content":"학습파트 DashBoard 입니다. 목업 page로 교체될 예정입니다.",
             "link":links}
 
 for dashboard in dashboard_li:
