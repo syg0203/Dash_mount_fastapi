@@ -18,6 +18,5 @@ Fastapi하위 어플리케이션에 Dash(plotly)를 마운트한 가이드라인
  ```
 ## TODO
 ```
-1. Panel코드 delete
-2. dbc.col 분리
+1. dbc.col 분리
 ```
