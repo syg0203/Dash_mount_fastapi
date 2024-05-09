@@ -20,3 +20,4 @@ Fastapi하위 어플리케이션에 Dash(plotly)를 마운트한 가이드라인
 ```
 1. dbc.col 분리
 ```
+![image](https://github.com/syg0203/Dash_mount_fastapi/assets/79491796/90d8239a-6b70-4991-aca2-37cab46ff66a)
